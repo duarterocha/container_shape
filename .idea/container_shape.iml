@@ -8,6 +8,13 @@
       <excludeFolder url="file://$MODULE_DIR$/container_shape" />
       <excludeFolder url="file://$MODULE_DIR$/parallel_runs" />
       <excludeFolder url="file://$MODULE_DIR$/container_shape_cylinder" />
+      <excludeFolder url="file://$MODULE_DIR$/short_problem_rb_cyl" />
+      <excludeFolder url="file://$MODULE_DIR$/parallel_runs_cylinder" />
+      <excludeFolder url="file://$MODULE_DIR$/short_problem_rb_cyl_test" />
+      <excludeFolder url="file://$MODULE_DIR$/axi_ break_1d" />
+      <excludeFolder url="file://$MODULE_DIR$/axi_ break_1d" />
+      <excludeFolder url="file://$MODULE_DIR$/axi_ break_2d" />
+      <excludeFolder url="file://$MODULE_DIR$/axi_ break" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

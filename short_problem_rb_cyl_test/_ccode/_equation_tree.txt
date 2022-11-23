@@ -1,0 +1,20 @@
+/
+|--domain : Combined Equations:
+|            NavierStokesEquations
+|            AdvectionDiffusionEquations
+|            MeshFileOutput
+|            MeshFileOutput
+|            InitialCondition: T=-field(coordinate_y,< code=0x0 , tags=>)
+|            InitialCondition: pressure=-1/2*field(coordinate_y,< code=0x0 , tags=>)**2
+|  |--bottom : Combined Equations:
+|  |            DirichletBC: T=0
+|  |            NoSlipBC
+|  |            DirichletBC: velocity_theta=0
+|  |--top : Combined Equations:
+|  |         DirichletBC: T=-1
+|  |         NoSlipBC
+|  |         DirichletBC: velocity_theta=0
+|  |--right : Combined Equations:
+|  |           NoSlipBC
+|  |           DirichletBC: velocity_theta=0
+|  |--left : AxisymmetryBC

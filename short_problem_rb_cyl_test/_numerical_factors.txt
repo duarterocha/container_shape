@@ -1,0 +1,9 @@
+/
+|--domain : 
+|            p_in_momentum_eq = 1
+|            div_u__in_conti_eq = 1
+|            inertia_in_momentum_eq = 1
+|  |--bottom : 
+|  |--top : 
+|  |--right : 
+|  |--left : 

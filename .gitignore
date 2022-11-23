@@ -1,5 +1,9 @@
 container_shape
 container_shape_bifurcation
 container_shape_cylinder
+short_problem_rb_cyl
+short_problem_rb_cyl_test
+axi_ break
 parallel_runs
+parallel_runs_cylinder
 eigenmodes
