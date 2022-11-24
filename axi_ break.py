@@ -1,14 +1,16 @@
 from pyoomph import *
+from pyoomph.equations.navier_stokes import NoSlipBC
 from pyoomph.expressions import *
 from pyoomph.meshes.simplemeshes import CircularMesh
 from pyoomph.output.plotting import MatplotlibPlotter
 
 
 class DiffusionEquation(Equations):
-    def __init__(self, name='u', scalar_field=True):
+    def __init__(self, name='u', scalar_field=True, one_dim=False):
         super(DiffusionEquation, self).__init__()
         self.name = name
         self.scalar_field = scalar_field
+        self.one_dim = one_dim
 
     def define_fields(self):
         if self.scalar_field:
@@ -21,8 +23,7 @@ class DiffusionEquation(Equations):
         if self.scalar_field:
             self.add_residual(weak(partial_t(u), utest) + weak(grad(u), grad(utest)) + weak((u - 1), utest))
         else:
-            self.add_residual(weak(partial_t(u), utest) + weak(grad(u), grad(utest)) + weak((u - vector(0.5,0.5)), utest))
-
+            self.add_residual(weak(partial_t(u), utest) + weak(grad(u), grad(utest)) + weak((u - vector(1,1)), utest))
 
 class Plotter(MatplotlibPlotter):
 
@@ -58,12 +59,12 @@ class AxisymmetryBreaking(Problem):
         mesh = self.mesh_2d()
         self.add_mesh_template(mesh)
 
-        eqs = DiffusionEquation(name='c', scalar_field=self.scalar_field)
+        eqs = DiffusionEquation(name='c', scalar_field=self.scalar_field, one_dim=self.one_dim)
         eqs += MeshFileOutput()
         if self.scalar_field:
             eqs += DirichletBC(c=0) @ "outer"
         else:
-            eqs += DirichletBC(c_x=0, c_y=0)
+            eqs += DirichletBC(c_x=0, c_y=0) @ "outer"
         eqs += RefineToLevel()
         for n in range(self.Neigen):
             eqs += TextFileOutput(eigenvector=n, eigenmode="real", filename="real_" + str(n))
@@ -80,18 +81,15 @@ class AxisymmetryBreaking(Problem):
         self.add_mesh_template(mesh)
         self.set_coordinate_system(axisymmetric)
 
-        eqs = DiffusionEquation(name='c', scalar_field=self.scalar_field)
+        eqs = DiffusionEquation(name='velocity', scalar_field=self.scalar_field)
 
         m_sym = self.param_m.get_symbol()
         r = var("coordinate_x")
-        c, ctest = var_and_test("c")
+        c, ctest = var_and_test("velocity")
 
         eqs += WeakContribution(m_sym ** 2 / r ** 2 * c, ctest)
         eqs += TextFileOutput()
-        if self.scalar_field:
-            eqs += DirichletBC(c=0) @ "outer"
-        else:
-            eqs += DirichletBC(c_x=0, c_y=0)
+        eqs += NoSlipBC() @ "outer"
         eqs += RefineToLevel()
 
         for n in range(self.Neigen):
@@ -107,8 +105,9 @@ class AxisymmetryBreaking(Problem):
 
 
 with AxisymmetryBreaking() as problem:
-    problem.one_dim = False
+    problem.one_dim = True
     problem.scalar_field = False
+    problem.Neigen = 10
     problem.set_c_compiler("tcc")
     problem.param_m.value = 2
     problem.max_refinement_level = 2
